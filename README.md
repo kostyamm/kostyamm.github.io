@@ -1,1 +1,1 @@
-# kmikhaltsevich.github.io - [preview](kmikhaltsevich.github.io)
+# kmikhaltsevich.github.io
