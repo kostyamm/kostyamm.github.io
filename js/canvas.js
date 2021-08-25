@@ -3,7 +3,7 @@ let elemLeft = null
 let elemTop = null
 let ctx = null
 
-const DEFAULT_OPTIONS = { points: 5, outer: 30, inner: 12, stroke: 'gray', line: 4 }
+const DEFAULT_OPTIONS = { points: 5, outer: 30, inner: 12, stroke: 'gray', line: 2 }
 const STARS = [
   { color: 'red', top: 100, left: 75 },
   { color: 'blue', top: 100, left: 175 },
@@ -11,7 +11,6 @@ const STARS = [
   { color: 'yellow', top: 200, left: 175 },
   { color: 'black', top: 300, left: 75 }
 ]
-
 
 const initCanvasPage = () => {
   canvasStars = document.getElementById('canvas-stars')
@@ -26,36 +25,35 @@ const initCanvasPage = () => {
   canvasStars.addEventListener('click', function (event) {
     let x = event.pageX - elemLeft
     let y = event.pageY - elemTop
-    const top = element => element.top-DEFAULT_OPTIONS.outer-DEFAULT_OPTIONS.line
-    const bottom = element => element.top+DEFAULT_OPTIONS.outer+DEFAULT_OPTIONS.line
-    const left = element => element.left-DEFAULT_OPTIONS.outer-DEFAULT_OPTIONS.line
-    const right = element => element.left+DEFAULT_OPTIONS.outer+DEFAULT_OPTIONS.line
-    const isStar = element => y > top(element) && y < bottom(element) && x > left(element) && x < right(element)
+
+    const isStar = star => ctx.isPointInPath(star.path, x, y)
     const starIndex = STARS.findIndex(isStar)
 
-    if (~starIndex) {
-      return addColorOnCanvas(STARS[starIndex])
-    }
+    if (~starIndex) { return addColorOnCanvas(STARS[starIndex]) }
+
     addColorOnCanvas({ color: 'white' })
   }, false)
 }
 
 
 function drawStar (index, centerX, centerY, fill, { points, outer, inner, stroke, line } = DEFAULT_OPTIONS) {
-  ctx.beginPath()
-  ctx.moveTo(centerX, centerY + outer)
+  const STAR = new Path2D()
+
+  STAR.moveTo(centerX, centerY + outer)
   for (let i = 0; i < 2 * points + 1; i++) {
     const r = (i % 2 === 0) ? outer : inner
     const a = Math.PI * i / points
-    ctx.lineTo(centerX + r * Math.sin(a), centerY + r * Math.cos(a))
+    STAR.lineTo(centerX + r * Math.sin(a), centerY + r * Math.cos(a))
   }
+
+  STARS[index].path = STAR
 
   ctx.closePath()
   ctx.fillStyle = fill
-  ctx.fill()
+  ctx.fill(STAR)
   ctx.strokeStyle = stroke
   ctx.lineWidth = line
-  ctx.stroke()
+  ctx.stroke(STAR)
 }
 
 function addColorOnCanvas (e) {
