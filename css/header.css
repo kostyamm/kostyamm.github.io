@@ -1,0 +1,21 @@
+.header {
+  padding: 12px 24px;
+  border-bottom: 1px dashed darkgrey;
+}
+.header>ul {
+  list-style-type: none;
+  padding-left: 0;
+  display: flex;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+.header>ul>li>a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.header>ul>li:not(:last-child) {
+  margin-right: 12px;
+}
